@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Support Details View</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+            color: #212529;
+            background-color: #f8f9fa;
+        }
+
+        .details-section {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        .section-header {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid #dee2e6;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .section-header:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 2px #bfdbfe;
+        }
+
+        .section-content {
+            padding: 1.25rem;
+        }
+
+        .section-content.hidden {
+            display: none;
+        }
+
+        .detail-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .detail-value {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            background-color: #f9fafb; 
+            color: #374151;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .detail-textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            background-color: #f9fafb;
+            min-height: 8rem;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto bg-white shadow-lg rounded-lg">
+        <header class="flex items-center justify-between p-6 border-b border-gray-200">
+            <div class="flex items-center">
+                <button class="text-gray-600 hover:text-gray-800" onclick="window.location.href='SUP_Details_Tabular_View_Prototype.html'">
+                    <span class="material-icons">arrow_back</span>
+                </button>
+                <h1 class="text-xl font-semibold text-gray-800 ml-4">Customer Support Details View</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="supNo" class="text-sm text-gray-500"></span>
+                <span id="ticketStatusBadge" class="text-xs font-semibold px-3 py-1 rounded-full"></span>
+                <button class="flex items-center justify-center bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-200 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Export Excel
+                </button>
+                <button class="flex items-center justify-center bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-200 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Export PDF
+                </button>
+            </div>
+        </header>
+
+        <div class="p-6">
+            <!-- Customer Details Section -->
+            <div class="details-section">
+                <div class="section-header" onclick="toggleSection('customerDetails')">
+                    <h2 class="text-lg font-medium">Customer Details</h2>
+                    <span class="material-icons" id="customerDetailsIcon">expand_less</span>
+                </div>
+                <div id="customerDetails" class="section-content grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div><label class="detail-label">Customer Name:</label><div id="customerName" class="detail-value"></div></div>
+                    <div><label class="detail-label">Project Name:</label><div id="projectName" class="detail-value"></div></div>
+                    <div><label class="detail-label">Caller's Organization:</label><div id="callerOrganization" class="detail-value"></div></div>
+                    <div><label class="detail-label">Caller's Name:</label><div id="callerName" class="detail-value"></div></div>
+                    <div><label class="detail-label">Caller's Contact Number:</label><div id="callerContactNumber" class="detail-value"></div></div>
+                    <div><label class="detail-label">Caller's Email ID:</label><div id="callerEmailId" class="detail-value"></div></div>
+                </div>
+            </div>
+
+            <!-- Contract Details Section -->
+            <div class="details-section">
+                <div class="section-header" onclick="toggleSection('contractDetails')">
+                    <h2 class="text-lg font-medium">Contract Details</h2>
+                    <span class="material-icons" id="contractDetailsIcon">expand_less</span>
+                </div>
+                <div id="contractDetails" class="section-content grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div><label class="detail-label">Contract Type:</label><div id="contractType" class="detail-value"></div></div>
+                    <div><label class="detail-label">Information Received:</label><div id="informationReceived" class="detail-value"></div></div>
+                    <div><label class="detail-label">Communication Mode:</label><div id="communicationMode" class="detail-value"></div></div>
+                    <div><label class="detail-label">Support Call Received Date:</label><div id="supportCallReceivedDate" class="detail-value"></div></div>
+                    <div><label class="detail-label">Received By:</label><div id="receivedByName" class="detail-value"></div></div>
+                    <div><label class="detail-label">Assigned To:</label><div id="assignedToName" class="detail-value"></div></div>
+                </div>
+            </div>
+
+            <!-- Tracking & Assignment Section -->
+            <div class="details-section">
+                <div class="section-header" onclick="toggleSection('trackingAssignment')">
+                    <h2 class="text-lg font-medium">Tracking & Assignment</h2>
+                    <span class="material-icons" id="trackingAssignmentIcon">expand_less</span>
+                </div>
+                <div id="trackingAssignment" class="section-content grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div><label class="detail-label">Action Required:</label><div class="detail-value"></div></div>
+                    <div><label class="detail-label">Estimated Date Of Resolution:</label><div id="estimatedDateOfResolution" class="detail-value"></div></div>
+                     <div><label class="detail-label">Estimated Hours:</label><div id="estimatedHours" class="detail-value"></div></div>
+                    <div><label class="detail-label">Ticket Status:</label><div id="ticketStatus" class="detail-value"></div></div>
+                </div>
+            </div>
+
+            <!-- Solution & Resolution Section -->
+            <div class="details-section">
+                 <div class="section-header" onclick="toggleSection('solutionResolution')">
+                    <h2 class="text-lg font-medium">Solution & Resolution</h2>
+                    <span class="material-icons" id="solutionResolutionIcon">expand_less</span>
+                </div>
+                <div id="solutionResolution" class="section-content grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div><label class="detail-label">Actual Date Of Resolution:</label><div id="actualDateOfResolution" class="detail-value"></div></div>
+                    <div><label class="detail-label">Actual Hours:</label><div id="actualHours" class="detail-value"></div></div>
+                    <div class="md:col-span-2"><label class="detail-label">Solution Description:</label><div class="detail-textarea"></div></div>
+                    <div class="md:col-span-2"><label class="detail-label">Root Cause Analysis:</label><div class="detail-textarea"></div></div>
+                     <div class="md:col-span-2"><label class="detail-label">Mitigation:</label><div class="detail-textarea"></div></div>
+                </div>
+            </div>
+
+            <!-- Payment Details Section -->
+             <div class="details-section">
+                 <div class="section-header" onclick="toggleSection('paymentDetails')">
+                    <h2 class="text-lg font-medium">Payment Details</h2>
+                    <span class="material-icons" id="paymentDetailsIcon">expand_less</span>
+                </div>
+                <div id="paymentDetails" class="section-content grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div><label class="detail-label">PO Number:</label><div id="poNumber" class="detail-value"></div></div>
+                    <div><label class="detail-label">PO Date:</label><div id="poDate" class="detail-value"></div></div>
+                     <div><label class="detail-label">Invoice Number:</label><div id="invoiceNumber" class="detail-value"></div></div>
+                    <div><label class="detail-label">Invoice Date:</label><div id="invoiceDate" class="detail-value"></div></div>
+                    <div><label class="detail-label">Payment Status:</label><div id="paymentStatus" class="detail-value"></div></div>
+                     <div class="md:col-span-2"><label class="detail-label">Remarks:</label><div class="detail-textarea"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const icon = document.getElementById(sectionId + 'Icon');
+            const isHidden = section.classList.contains('hidden');
+
+            if (isHidden) {
+                section.classList.remove('hidden');
+                icon.textContent = 'expand_less';
+            } else {
+                section.classList.add('hidden');
+                icon.textContent = 'expand_more';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const dataString = localStorage.getItem('supDetailViewData');
+            if (dataString) {
+                const data = JSON.parse(dataString);
+
+                // Helper function to set text content or a non-breaking space if data is missing
+                const setText = (id, value) => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = value || '\u00A0'; // \u00A0 is a non-breaking space
+                    }
+                };
+                
+                // Helper to set status badge color
+                const setStatusBadge = (status) => {
+                    const badge = document.getElementById('ticketStatusBadge');
+                    if (!badge) return;
+                    badge.textContent = status;
+                    switch(status.toLowerCase()) {
+                        case 'in progress':
+                        case 'work in progress':
+                            badge.className = 'bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full'; break;
+                        case 'open':
+                            badge.className = 'bg-yellow-100 text-yellow-700 text-xs font-semibold px-3 py-1 rounded-full'; break;
+                        case 'closed':
+                        case 'resolved':
+                            badge.className = 'bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full'; break;
+                        case 'on hold':
+                            badge.className = 'bg-gray-100 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full'; break;
+                        default:
+                             badge.className = 'bg-gray-100 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full';
+                    }
+                }
+
+                // Populate Header
+                setText('supNo', `SUP No: SUP${data.srNo}`);
+                setStatusBadge(data.ticketStatus);
+                
+                // Populate all sections
+                setText('customerName', data.customerName);
+                setText('projectName', data.projectName);
+                setText('callerOrganization', data.callerOrganization);
+                setText('callerName', data.callerName);
+                setText('callerContactNumber', data.callerContactNumber);
+                setText('callerEmailId', data.callerEmailId);
+                setText('contractType', data.contractType);
+                setText('informationReceived', data.communicationMode);
+                setText('communicationMode', data.communicationMode);
+                setText('supportCallReceivedDate', data.supportCallReceivedDate);
+                setText('receivedByName', data.receivedByName);
+                setText('assignedToName', data.assignedToName);
+                setText('estimatedDateOfResolution', data.estimatedDateOfResolution);
+                setText('estimatedHours', data.estimatedHours);
+                setText('ticketStatus', data.ticketStatus);
+                setText('actualDateOfResolution', data.actualDateOfResolution);
+                setText('actualHours', data.actualHours);
+                setText('poNumber', data.poNumber);
+                setText('poDate', data.poDate);
+                setText('invoiceNumber', data.invoiceNumber);
+                setText('invoiceDate', data.invoiceDate);
+                setText('paymentStatus', data.paymentStatus);
+
+                // Clean up localStorage after use
+                localStorage.removeItem('supDetailViewData');
+            } else {
+                // Handle case where no data is passed
+                console.log('No detail data found in localStorage.');
+                const mainContent = document.querySelector('.p-6');
+                if(mainContent){
+                    mainContent.innerHTML = `<p class="text-center text-red-500 text-lg py-10">No data to display. Please select a record from the <a href="SUP_Details_Tabular_View_Prototype.html" class="underline text-blue-600">table view</a>.</p>`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

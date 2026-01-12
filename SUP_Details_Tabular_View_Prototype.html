@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Customer Details</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .page-container {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .merged-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 2200px;
+        }
+
+        thead {
+            background-color: #f1f5f9;
+        }
+
+        th {
+            padding: 12px 16px;
+            font-weight: 600;
+            color: #475569;
+            font-size: 13px;
+            border: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        tbody tr:hover {
+            background-color: #eef6ff;
+            transition: background-color 0.2s ease;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .action-buttons button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            color: #64748b;
+        }
+        .action-buttons button:hover .material-icons-outlined.text-blue-600 {
+            color: #2563eb;
+        }
+        .action-buttons button:hover .material-icons-outlined.text-red-600 {
+            color: #dc2626;
+        }
+        
+        .view-svg-icon {
+            width: 28px;
+            height: 28px;
+            color: #3b82f6; /* Blue-500 */
+            transition: color 0.2s ease;
+        }
+
+        .action-buttons button:hover .view-svg-icon {
+            color: #1d4ed8; /* Blue-700 */
+        }
+
+        .header-button {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 1px solid #c7d2fe;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-button:hover {
+            background-color: #c7d2fe;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+        }
+        .header-button .material-icons-outlined {
+            color: #3730a3;
+        }
+
+        .pagination {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0 0 0;
+            font-size: 13px;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 16px;
+        }
+
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .filter-input {
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            font-size: 14px;
+            flex-grow: 1;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-color: #fff;
+        }
+
+        .filter-input:focus { 
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        .pagination-button {
+            background-color: #fff;
+            color: #64748b;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .pagination-button:hover {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            color: #334155;
+        }
+
+        .pagination-button:disabled {
+            background-color: #f8fafc;
+            color: #cbd5e1;
+            cursor: not-allowed;
+            border-color: #e2e8f0;
+        }
+        .pagination-button .material-icons-outlined {
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .page-container {
+                padding: 16px;
+            }
+            .header-button {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            .header-button .material-icons-outlined {
+                font-size: 18px;
+            }
+            .pagination {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .pagination > div:first-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-container">
+        <!-- Header Buttons -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <div></div> 
+            <div class="flex flex-wrap gap-3 mt-4 md:mt-0 md:ml-auto justify-end w-full md:w-auto">
+                <button class="header-button" onclick="window.location.href='SUP_Module_Prototype_Updated.html'">
+                    <span class="material-icons-outlined">add</span>
+                    <span>Add</span>
+                </button>
+                <button class="header-button">
+                    <span class="material-icons-outlined">file_download</span>
+                    <span>Export Excel</span>
+                </button>
+                <button class="header-button">
+                    <span class="material-icons-outlined">picture_as_pdf</span>
+                    <span>Export PDF</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Merged Container for Search, Table, and Pagination -->
+        <div class="merged-container">
+            <!-- Search Section -->
+            <div id="searchSectionGlobal" class="mb-6"> 
+                <label class="block text-sm font-medium text-slate-600 mb-1" for="searchInput">Search Table Content</label>
+                <input class="filter-input w-full" id="searchInput" placeholder="Search by any field in the table..." type="text" />
+            </div>
+
+            <!-- Table Container -->
+            <div class="table-container" id="tableDataContainer"> 
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="text-right">Sr No</th>
+                            <th class="text-left">Customer Name</th>
+                            <th class="text-left">Project Name</th>
+                            <th class="text-left">Caller Organization</th>
+                            <th class="text-left">Caller Name</th>
+                            <th class="text-right">Caller Contact Number</th>
+                            <th class="text-left">Caller Email Id</th>
+                            <th class="text-left">Contract Type</th>
+                            <th class="text-left">Communication Mode</th>
+                            <th class="text-center">Support Call Received Date</th>
+                            <th class="text-left">Received By Name</th>
+                            <th class="text-left">AssignedTo Name</th>
+                            <th class="text-center">Estimated Date Of Resolution</th>
+                            <th class="text-right">Estimated Hours</th>
+                            <th class="text-center">Ticket Status</th>
+                            <th class="text-center">Actual Date Of Resolution</th>
+                            <th class="text-right">Actual Hours</th>
+                            <th class="text-left">PO Number</th>
+                            <th class="text-center">PO Date</th>
+                            <th class="text-left">Invoice Number</th>
+                            <th class="text-center">Invoice Date</th>
+                            <th class="text-center">Payment Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Container -->
+            <div class="pagination" id="paginationContainer"> 
+                <div class="flex items-center">
+                    <span class="mr-2 text-sm text-slate-600">Show</span>
+                    <select id="itemsPerPageSelect" class="block w-auto rounded-md border-gray-300 py-1 pl-3 pr-10 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                    <span class="ml-2 text-sm text-slate-600">entries</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="paginationInfo" class="text-sm text-slate-600">Showing 0 to 0 of 0 entries</span>
+                    <button id="prevPageBtn" class="pagination-button" disabled>
+                        <span class="material-icons-outlined">chevron_left</span>
+                    </button>
+                    <button id="nextPageBtn" class="pagination-button">
+                        <span class="material-icons-outlined">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+        </div> 
+    </div> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // DOM Elements
+            const searchInput = document.getElementById('searchInput');
+            const tableBody = document.getElementById('tableBody');
+            const itemsPerPageSelect = document.getElementById('itemsPerPageSelect');
+            const paginationInfo = document.getElementById('paginationInfo');
+            const prevPageBtn = document.getElementById('prevPageBtn');
+            const nextPageBtn = document.getElementById('nextPageBtn');
+
+            // Data state
+            let masterData = [];
+            let displayedData = []; // Data after search filtering
+            
+            // Pagination state
+            let currentPage = 1;
+            let itemsPerPage = parseInt(itemsPerPageSelect.value);
+
+            const columnKeys = [
+                "srNo", "customerName", "projectName", "callerOrganization", "callerName", 
+                "callerContactNumber", "callerEmailId", "contractType", "communicationMode", "supportCallReceivedDate", 
+                "receivedByName", "assignedToName", "estimatedDateOfResolution", "estimatedHours", "ticketStatus", 
+                "actualDateOfResolution", "actualHours", "poNumber", "poDate", "invoiceNumber", 
+                "invoiceDate", "paymentStatus" 
+            ];
+
+            const columnAlignments = {
+                "srNo": "text-right", "customerName": "text-left", "projectName": "text-left", 
+                "callerOrganization": "text-left", "callerName": "text-left", "callerContactNumber": "text-right", 
+                "callerEmailId": "text-left", "contractType": "text-left", "communicationMode": "text-left", 
+                "supportCallReceivedDate": "text-center", "receivedByName": "text-left", "assignedToName": "text-left", 
+                "estimatedDateOfResolution": "text-center", "estimatedHours": "text-right", "ticketStatus": "text-center", 
+                "actualDateOfResolution": "text-center", "actualHours": "text-right", "poNumber": "text-left", 
+                "poDate": "text-center", "invoiceNumber": "text-left", "invoiceDate": "text-center", "paymentStatus": "text-center"
+            };
+
+            // Dummy data for demonstration
+            function generateDummyData() {
+                 return [
+                    { srNo: "1", customerName: "Infosys", projectName: "Project Alpha", callerOrganization: "ABC Corp", callerName: "John Doe", callerContactNumber: "9876543210", callerEmailId: "john.doe@abccorp.com", contractType: "Annual Maintenance", communicationMode: "Email", supportCallReceivedDate: "15-01-2024", receivedByName: "Support Team A", assignedToName: "Alice Wonderland", estimatedDateOfResolution: "18-01-2024", estimatedHours: "8", ticketStatus: "In Progress", actualDateOfResolution: "", actualHours: "", poNumber: "PO12345", poDate: "01-12-2024", invoiceNumber: "INV001", invoiceDate: "20-01-2024", paymentStatus: "Pending"},
+                    { srNo: "2", customerName: "Wipro", projectName: "Project Beta", callerOrganization: "XYZ Ltd", callerName: "Jane Smith", callerContactNumber: "1234567890", callerEmailId: "jane.smith@xyzltd.com", contractType: "Time & Material", communicationMode: "Phone Call", supportCallReceivedDate: "10-02-2024", receivedByName: "Support Team B", assignedToName: "Bob The Builder", estimatedDateOfResolution: "12-02-2024", estimatedHours: "16", ticketStatus: "Open", actualDateOfResolution: "", actualHours: "", poNumber: "PO67890", poDate: "15-01-2024", invoiceNumber: "", invoiceDate: "", paymentStatus: "Not Invoiced"},
+                    { srNo: "3", customerName: "TCS", projectName: "Project Gamma", callerOrganization: "PQR Inc", callerName: "Robert Brown", callerContactNumber: "5551234567", callerEmailId: "robert.brown@pqrinc.com", contractType: "Fixed Price", communicationMode: "Portal", supportCallReceivedDate: "05-03-2024", receivedByName: "Support Team A", assignedToName: "Charlie Brown", estimatedDateOfResolution: "10-03-2024", estimatedHours: "24", ticketStatus: "Closed", actualDateOfResolution: "09-03-2024", actualHours: "22", poNumber: "PO11223", poDate: "01-02-2024", invoiceNumber: "INV002", invoiceDate: "15-03-2024", paymentStatus: "Paid"},
+                    { srNo: "4", customerName: "HCL", projectName: "Project Delta", callerOrganization: "LMN Solutions", callerName: "Emily White", callerContactNumber: "7778889990", callerEmailId: "emily.white@lmnsolutions.com", contractType: "Annual Maintenance", communicationMode: "Chat", supportCallReceivedDate: "20-04-2024", receivedByName: "Support Team C", assignedToName: "Diana Prince", estimatedDateOfResolution: "25-04-2024", estimatedHours: "12", ticketStatus: "On Hold", actualDateOfResolution: "", actualHours: "", poNumber: "PO33445", poDate: "10-03-2024", invoiceNumber: "INV003", invoiceDate: "28-04-2024", paymentStatus: "Pending"},
+                    { srNo: "5", customerName: "Tech Mahindra", projectName: "Project Epsilon", callerOrganization: "EFG Co.", callerName: "Michael Green", callerContactNumber: "3332221110", callerEmailId: "michael.green@efgco.com", contractType: "Time & Material", communicationMode: "Email", supportCallReceivedDate: "01-05-2024", receivedByName: "Support Team B", assignedToName: "Edward Nygma", estimatedDateOfResolution: "05-05-2024", estimatedHours: "20", ticketStatus: "Resolved", actualDateOfResolution: "04-05-2024", actualHours: "18", poNumber: "PO55667", poDate: "15-04-2024", invoiceNumber: "INV004", invoiceDate: "10-05-2024", paymentStatus: "Paid"}
+                ];
+            }
+
+            function renderTable(dataToRender) {
+                tableBody.innerHTML = ''; 
+                if (!dataToRender || dataToRender.length === 0) {
+                    const tr = document.createElement('tr');
+                    const td = document.createElement('td');
+                    td.colSpan = columnKeys.length + 1;
+                    td.textContent = 'No data available for the current search.';
+                    td.classList.add('text-center', 'py-4', 'text-slate-500');
+                    tr.appendChild(td);
+                    tableBody.appendChild(tr);
+                    return;
+                }
+
+                dataToRender.forEach(item => {
+                    const tr = document.createElement('tr');
+                    columnKeys.forEach(key => {
+                        const td = document.createElement('td');
+                        td.textContent = item[key] || ''; 
+                        if (columnAlignments[key]) {
+                            td.classList.add(columnAlignments[key]);
+                        } else {
+                            td.classList.add('text-left');
+                        }
+                        tr.appendChild(td);
+                    });
+
+                    const actionTd = document.createElement('td');
+                    actionTd.classList.add('action-buttons');
+                    actionTd.innerHTML = `
+                        <button title="View" class="view-btn" data-id="${item.srNo}">
+                            <svg class="view-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <defs>
+                                    <linearGradient id="docGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#e0f2fe" />
+                                        <stop offset="100%" stop-color="#ffffff" />
+                                    </linearGradient>
+                                </defs>
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="url(#docGradient)" stroke-width="2"></path>
+                                <polyline points="14 2 14 8 20 8" stroke-width="2"></polyline>
+                                <!-- Eye Icon -->
+                                <path d="M8.5 14.5c1.5-2.5 4.5-2.5 6 0 -1.5 2.5-4.5 2.5-6 0z" stroke-width="1.5"></path>
+                                <circle cx="11.5" cy="14.5" r="1" fill="currentColor"></circle>
+                            </svg>
+                        </button>
+                        <button title="Edit"><span class="material-icons-outlined text-blue-600">edit</span></button>
+                        <button title="Delete"><span class="material-icons-outlined text-red-600">delete</span></button>
+                    `;
+                    tr.appendChild(actionTd);
+                    tableBody.appendChild(tr);
+                });
+            }
+
+            function updatePaginationControls(totalItems) {
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                
+                if (totalItems === 0) {
+                    paginationInfo.textContent = 'Showing 0 to 0 of 0 entries';
+                    currentPage = 1; 
+                } else {
+                    const startItem = (currentPage - 1) * itemsPerPage + 1;
+                    const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+                    paginationInfo.textContent = `Showing ${startItem} to ${endItem} of ${totalItems} entries`;
+                }
+
+                prevPageBtn.disabled = currentPage === 1;
+                nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+            }
+
+            function applySearchAndRender() {
+                const searchTerm = searchInput.value.toLowerCase();
+
+                if (searchTerm) {
+                    displayedData = masterData.filter(item => 
+                        Object.values(item).some(val => 
+                            String(val).toLowerCase().includes(searchTerm)
+                        )
+                    );
+                } else {
+                    displayedData = [...masterData]; // If search is empty, show all data
+                }
+                
+                currentPage = 1; // Reset to page 1 on new search
+                renderCurrentPage();
+            }
+
+            function renderCurrentPage() {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const pageData = displayedData.slice(startIndex, endIndex);
+
+                renderTable(pageData);
+                updatePaginationControls(displayedData.length);
+            }
+
+            // --- Event Listeners and Initial Setup ---
+            masterData = generateDummyData();
+            displayedData = [...masterData]; // Initially, displayed data is all data
+
+            searchInput.addEventListener('input', applySearchAndRender);
+
+            itemsPerPageSelect.addEventListener('change', function() {
+                itemsPerPage = parseInt(this.value);
+                currentPage = 1; // Reset to page 1 when changing items per page
+                renderCurrentPage();
+            });
+
+            prevPageBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderCurrentPage();
+                }
+            });
+
+            nextPageBtn.addEventListener('click', function() {
+                const totalPages = Math.ceil(displayedData.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderCurrentPage();
+                }
+            });
+
+            tableBody.addEventListener('click', function(event) {
+                const viewButton = event.target.closest('.view-btn');
+                if (viewButton) {
+                    const recordId = viewButton.dataset.id;
+                    const record = displayedData.find(item => item.srNo == recordId);
+                    
+                    if (record) {
+                        localStorage.setItem('supDetailViewData', JSON.stringify(record));
+                        window.location.href = 'SUP_Details_View_Only_Mode.html';
+                    } else {
+                        console.error('Could not find record with ID:', recordId);
+                    }
+                }
+            });
+
+            // Initial render
+            renderCurrentPage();
+        });
+    </script>
+</body>
+</html>

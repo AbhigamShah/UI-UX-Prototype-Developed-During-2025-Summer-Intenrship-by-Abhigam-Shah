@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Customer Support Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+      body {
+        font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+        color: #212529;
+        background-color: #f8f9fa;
+      }
+      .collapsible-legend-button { /* Replaces .collapsible-header for the button inside legend */
+        background-color: #ffffff;
+        padding: 0.75rem 1.25rem;
+        border-bottom: 1px solid #dee2e6;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        text-align: left;
+        font-weight: 600; /* semibold */
+        color: #4a5568; /* text-gray-700 */
+        border-radius: 0.25rem 0.25rem 0 0;
+      }
+      .collapsible-legend-button:focus {
+        outline: 2px solid #80bdff; /* Example focus style */
+      }
+      .collapsible-content {
+        padding: 1.25rem;
+        border: 1px solid #dee2e6;
+        border-top: none;
+        border-radius: 0 0 0.25rem 0.25rem;
+        background-color: #ffffff;
+      }
+      .input-field,
+      .textarea-field {
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        width: 100%;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+      }
+      .input-field:focus,
+      .textarea-field:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+      }
+      label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .btn {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        text-align: center;
+        transition: background-color .15s ease-in-out, border-color .15s ease-in-out, color .15s ease-in-out, box-shadow .15s ease-in-out;
+      }
+      .btn-primary {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+      }
+      .btn-secondary {
+        color: #fff;
+        background-color: #007bff; /* Kept same as primary, adjust if needed */
+        border-color: #007bff;
+      }
+      .btn-secondary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+      }
+      .options-container {
+        max-height: 12rem;
+        overflow-y: auto;
+        border-top-width: 0;
+      }
+      .option-item {
+        padding: 0.5rem 0.75rem;
+        cursor: pointer;
+      }
+      .option-item:hover {
+        background-color: #f0f0f0;
+      }
+      .option-item.no-results {
+        color: #6b7280;
+        cursor: default;
+      }
+      /* Styling for fieldset and legend to remove default browser styling */
+      fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+      legend {
+        padding: 0;
+        display: block; /* Ensure legend takes full width for the button */
+        width: 100%;
+      }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-['Roboto'] text-base leading-6">
+<main class="container mx-auto p-4 max-w-5xl">
+    <header class="py-3 mb-4 border-b border-gray-200">
+        <h1 class="text-2xl font-semibold text-gray-800">Customer Support Details</h1>
+        <p class="text-right text-sm font-medium text-green-600">SUP No: SUPXXXXXXX ticket raised successfully</p>
+    </header>
+
+    <form id="ticketForm">
+        <fieldset class="mb-6 bg-white rounded-lg shadow">
+            <legend>
+                <button type="button" class="collapsible-legend-button" aria-expanded="true" aria-controls="customerDetailsContent" onclick="toggleCollapse('customerDetailsContent', this)">
+                    <h2 class="text-lg font-semibold text-gray-700">Customer Details</h2>
+                    <span class="material-icons" aria-hidden="true">expand_less</span>
+                </button>
+            </legend>
+            <div class="collapsible-content grid grid-cols-1 md:grid-cols-2 gap-6" id="customerDetailsContent">
+                <div class="form-group">
+                    <label for="customerNameSearch">Customer Name:</label>
+                    <div class="relative">
+                        <input type="text" id="customerNameSearch" class="input-field w-full pr-10" placeholder="Search or select..." />
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 011.14.976l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div id="customerNameOptions" class="options-container hidden absolute w-full bg-white border border-gray-300 rounded-b-md mt-0 z-10 shadow-lg"></div>
+                        <input type="hidden" id="customerName" name="customerName" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="projectNameSearch">Project Name:</label>
+                    <div class="relative">
+                        <input type="text" id="projectNameSearch" class="input-field w-full pr-10" placeholder="Search or select..." />
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                             <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 011.14.976l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div id="projectNameOptions" class="options-container hidden absolute w-full bg-white border border-gray-300 rounded-b-md mt-0 z-10 shadow-lg"></div>
+                        <input type="hidden" id="projectName" name="projectName" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="callerOrganisation">Caller's Organisation</label>
+                    <select class="input-field w-full" id="callerOrganisation" name="callerOrganisation">
+                        <option value="" disabled selected>Select organization</option>
+                        <option value="Google">Google</option>
+                        <option value="Microsoft">Microsoft</option>
+                        <option value="Amazon">Amazon</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="callerNameSelect">Caller's Name</label>
+                    <select class="input-field w-full" id="callerNameSelect" onchange="populateCallerInfo()">
+                        <option value="" disabled selected>Select caller</option>
+                        <option value="John Doe" data-contact="1234567890" data-email="john@example.com">John Doe</option>
+                        <option value="Jane Smith" data-contact="9876543210" data-email="jane@example.com">Jane Smith</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div id="callerInfoFields" class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group">
+                        <label for="callerContactNumber">Caller's Contact Number</label>
+                        <input class="input-field w-full" id="callerContactNumber" type="tel" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="callerEmailId">Caller's Email ID</label>
+                        <input class="input-field w-full" id="callerEmailId" type="email" readonly>
+                    </div>
+                </div>
+                <div id="manualEntryFields" class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group">
+                        <label for="callerNameManual">Enter Caller's Name</label>
+                        <input class="input-field w-full" id="callerNameManual" type="text" placeholder="Enter name" onblur="lockManual(this)">
+                    </div>
+                    <div class="form-group">
+                        <label for="callerContactManual">Enter Contact Number</label>
+                        <input class="input-field w-full" id="callerContactManual" type="tel" placeholder="Enter number" onblur="lockManual(this)">
+                    </div>
+                    <div class="form-group">
+                        <label for="callerEmailManual">Enter Email ID</label>
+                        <input class="input-field w-full" id="callerEmailManual" type="email" placeholder="Enter email" onblur="lockManual(this)">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="mb-6 bg-white rounded-lg shadow">
+            <legend>
+                <button type="button" class="collapsible-legend-button" aria-expanded="true" aria-controls="contractDetailsContent" onclick="toggleCollapse('contractDetailsContent', this)">
+                    <h2 class="text-lg font-semibold text-gray-700">Contract Details</h2>
+                    <span class="material-icons" aria-hidden="true">expand_less</span>
+                </button>
+            </legend>
+            <div class="collapsible-content grid grid-cols-1 md:grid-cols-2 gap-6" id="contractDetailsContent">
+                <div class="form-group">
+                    <label for="contractType">Contract Type</label>
+                    <select class="input-field" id="contractType" name="contractType">
+                        <option value="" disabled selected>Select contract type</option>
+                        <option value="AMC">AMC</option>
+                        <option value="Warranty">Warranty</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Complimentary">Complimentary</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="informationReceived">Information Received</label>
+                    <input class="input-field" id="informationReceived" name="informationReceived" placeholder="Source of information" type="text"/>
+                </div>
+                <div class="form-group">
+                    <label for="communicationMode">Communication Mode</label>
+                    <select class="input-field" id="communicationMode" name="communicationMode">
+                        <option value="" disabled selected>Select communication mode</option>
+                        <option value="Call">Call</option>
+                        <option value="Email">Email</option>
+                        <option value="Message">Message</option>
+                        <option value="In-Person">In-Person</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="supportCallReceivedDate">Support Call Received Date</label>
+                    <input class="input-field" id="supportCallReceivedDate" name="supportCallReceivedDate" placeholder="DD/MM/YYYY" type="date"/>
+                </div>
+                <div class="form-group">
+                    <label for="receivedBySearch">Received By (Name)</label>
+                    <div class="relative">
+                        <input type="text" id="receivedBySearch" class="input-field w-full pr-10" placeholder="Search or select name...">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 011.14.976l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div id="receivedByOptions" class="options-container hidden absolute w-full bg-white border border-gray-300 rounded-b-md mt-0 z-10 shadow-lg"></div>
+                        <input type="hidden" id="receivedBy" name="receivedBy">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="assignedToSearch">Assigned To (Name)</label>
+                    <div class="relative">
+                        <input type="text" id="assignedToSearch" class="input-field w-full pr-10" placeholder="Search or select name...">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 011.14.976l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div id="assignedToOptions" class="options-container hidden absolute w-full bg-white border border-gray-300 rounded-b-md mt-0 z-10 shadow-lg"></div>
+                        <input type="hidden" id="assignedTo" name="assignedTo">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="mb-6 bg-white rounded-lg shadow">
+            <legend>
+                 <button type="button" class="collapsible-legend-button" aria-expanded="true" aria-controls="trackingAssignmentContent" onclick="toggleCollapse('trackingAssignmentContent', this)">
+                    <h2 class="text-lg font-semibold text-gray-700">Tracking &amp; Assignment</h2>
+                    <span class="material-icons" aria-hidden="true">expand_less</span>
+                </button>
+            </legend>
+            <!-- MODIFICATION: Rearranged fields into a 2x2 grid -->
+            <div class="collapsible-content grid grid-cols-1 md:grid-cols-2 gap-6" id="trackingAssignmentContent">
+                <!-- Row 1, Col 1 -->
+                <div class="form-group">
+                    <label for="actionRequired">Action Required</label>
+                    <input class="input-field" id="actionRequired" name="actionRequired" placeholder="Describe action needed" type="text"/>
+                </div>
+                <!-- Row 1, Col 2: New Field -->
+                <div class="form-group">
+                    <label for="estimatedDate">Estimated Date</label>
+                    <input class="input-field" id="estimatedDate" name="estimatedDate" placeholder="DD/MM/YYYY" type="date"/>
+                </div>
+                <!-- Row 2, Col 1 -->
+                <div class="form-group">
+                    <label for="estimatedDuration">Estimated Duration (HH:MM)</label>
+                    <input id="estimatedDuration" name="estimatedDuration" type="text" class="input-field" placeholder="e.g. 2:30" title="Enter duration in HH:MM format (e.g., 2:30 or 120:45)" maxlength="6" required />
+                </div>
+                <!-- Row 2, Col 2 -->
+                <div class="form-group">
+                    <label for="ticketStatus">Ticket Status</label>
+                    <select class="input-field" id="ticketStatus" name="ticketStatus">
+                        <option value="" disabled selected>Select ticket status</option>
+                        <option value="Open">Open</option>
+                        <option value="Work In Progress">Work In Progress</option>
+                        <option value="Fixed">Fixed</option>
+                        <option value="Deployed">Deployed</option>
+                        <option value="OK In Live">OK In Live</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="mb-6 bg-white rounded-lg shadow">
+            <legend>
+                <button type="button" class="collapsible-legend-button" aria-expanded="true" aria-controls="solutionResolutionContent" onclick="toggleCollapse('solutionResolutionContent', this)">
+                    <h2 class="text-lg font-semibold text-gray-700">Solution &amp; Resolution</h2>
+                    <span class="material-icons" aria-hidden="true">expand_less</span>
+                </button>
+            </legend>
+            <div class="collapsible-content grid grid-cols-1 md:grid-cols-2 gap-6" id="solutionResolutionContent">
+                <div class="form-group">
+                    <label for="actualDateResolution">Actual Date of Resolution</label>
+                    <input class="input-field" id="actualDateResolution" name="actualDateResolution" placeholder="DD/MM/YYYY" type="date"/>
+                </div>
+                <div class="form-group">
+                    <label for="actualDuration">Actual Duration (HH:MM)</label>
+                    <input id="actualDuration" name="actualDuration" type="text" class="input-field" placeholder="e.g. 1:15" title="Enter duration in HH:MM format (e.g., 1:15 or 30:00)" maxlength="6" required />
+                </div>
+                <div class="form-group md:col-span-2">
+                    <label for="solutionDescription">Solution Description</label>
+                    <textarea class="textarea-field h-24" id="solutionDescription" name="solutionDescription" placeholder="Describe the solution implemented"></textarea>
+                </div>
+                <div class="form-group md:col-span-2">
+                    <label for="rootCauseAnalysis">Root Cause Analysis</label>
+                    <textarea class="textarea-field h-24" id="rootCauseAnalysis" name="rootCauseAnalysis" placeholder="Describe the root cause"></textarea>
+                </div>
+                <div class="form-group md:col-span-2">
+                    <label for="mitigation">Mitigation</label>
+                    <textarea class="textarea-field h-24" id="mitigation" name="mitigation" placeholder="Describe mitigation steps"></textarea>
+                </div>
+            </div>
+        </fieldset>
+        
+        <fieldset class="mb-6 bg-white rounded-lg shadow">
+            <legend>
+                <button type="button" class="collapsible-legend-button" aria-expanded="true" aria-controls="paymentDetailsContent" onclick="toggleCollapse('paymentDetailsContent', this)">
+                    <h2 class="text-lg font-semibold text-gray-700">Payment Details</h2>
+                    <span class="material-icons" aria-hidden="true">expand_less</span>
+                </button>
+            </legend>
+            <div class="collapsible-content grid grid-cols-1 md:grid-cols-2 gap-6" id="paymentDetailsContent">
+                <div class="form-group">
+                    <label for="poNumber">PO Number</label>
+                    <input class="input-field" id="poNumber" name="poNumber" placeholder="Enter PO number" type="text"/>
+                </div>
+                <div class="form-group">
+                    <label for="poDate">PO Date</label>
+                    <input class="input-field" id="poDate" name="poDate" placeholder="DD/MM/YYYY" type="date"/>
+                </div>
+                <div class="form-group">
+                    <label for="invoiceNumber">Invoice Number</label>
+                    <input class="input-field" id="invoiceNumber" name="invoiceNumber" placeholder="Enter invoice number" type="text"/>
+                </div>
+                <div class="form-group">
+                    <label for="invoiceDate">Invoice Date</label>
+                    <input class="input-field" id="invoiceDate" name="invoiceDate" placeholder="DD/MM/YYYY" type="date"/>
+                </div>
+                <div class="form-group">
+                    <label for="paymentStatus">Payment Status</label>
+                    <select class="input-field w-full" id="paymentStatus" name="paymentStatus">
+                        <option value="" disabled selected>Select payment status</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Pending Approval">Pending Approval</option>
+                        <option value="Pending Payment">Pending Payment</option>
+                        <option value="Overdue">Overdue</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="form-group md:col-span-2">
+                    <label for="remarks">Remarks</label>
+                    <textarea class="textarea-field h-24" id="remarks" name="remarks" placeholder="Any additional remarks"></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+        <footer class="flex justify-center space-x-6 mt-8 mb-4">
+            <button class="btn btn-primary" onclick="window.location.href='SUP_Details_Tabular_View_Prototype.html';"type="submit">
+                Save Ticket
+            </button>
+            <button class="btn btn-secondary" type="button" onclick="window.location.href='SUP_Details_Tabular_View_Prototype.html';">
+                Back to List
+            </button>
+        </footer>
+    </form>
+</main>
+
+<script>
+// --- Caller Info Script (conditionally shows/hides fields) ---
+function populateCallerInfo() {
+  const select = document.getElementById('callerNameSelect');
+  const value = select.value; // This will be "" if "Select caller" is chosen
+
+  const callerFields = document.getElementById('callerInfoFields');
+  const manualFields = document.getElementById('manualEntryFields');
+
+  const contactNumberInput = document.getElementById('callerContactNumber');
+  const emailInput = document.getElementById('callerEmailId');
+  const manualNameInput = document.getElementById('callerNameManual');
+  const manualContactInput = document.getElementById('callerContactManual');
+  const manualEmailInput = document.getElementById('callerEmailManual');
+
+  // Default state: hide both sections and clear all related fields
+  callerFields.classList.add('hidden');
+  manualFields.classList.add('hidden');
+
+  contactNumberInput.value = '';
+  emailInput.value = '';
+  manualNameInput.value = '';
+  manualContactInput.value = '';
+  manualEmailInput.value = '';
+  // Reset readOnly status for manual fields
+  manualNameInput.readOnly = false;
+  manualContactInput.readOnly = false;
+  manualEmailInput.readOnly = false;
+
+
+  if (value === 'Other') {
+    // If "Other" is selected, show manual entry fields.
+    manualFields.classList.remove('hidden');
+  } else if (value) {
+    // If a specific caller is selected (value is not "" and not "Other")
+    const option = select.options[select.selectedIndex];
+    const contact = option.getAttribute('data-contact') || '';
+    const email = option.getAttribute('data-email') || '';
+
+    contactNumberInput.value = contact;
+    emailInput.value = email;
+
+    callerFields.classList.remove('hidden');
+  }
+}
+
+function lockManual(input) {
+  if (input.value.trim() !== '') {
+    input.readOnly = true;
+  }
+}
+
+// --- Duration Formatting Script ---
+const durationInputs = document.querySelectorAll('#estimatedDuration, #actualDuration');
+function pad(n) {
+  return n.toString().padStart(2, '0');
+}
+durationInputs.forEach(input => {
+  input.addEventListener('input', (e) => {
+    let raw = e.target.value.replace(/[^0-9]/g, '');
+    if (raw.length === 0) {
+        e.target.value = '';
+        return;
+    }
+    if (raw.length < 3) {
+      e.target.value = raw;
+      return;
+    }
+    let hours = raw.slice(0, raw.length - 2);
+    let minutes = raw.slice(-2);
+    if (parseInt(minutes) > 59) {
+      minutes = "59";
+    }
+    e.target.value = `${parseInt(hours)}:${pad(minutes)}`;
+  });
+
+  input.addEventListener('blur', (e) => {
+    const value = e.target.value;
+    if (value === "") return;
+
+    const match = value.match(/^(\d{1,3}):(\d{1,2})$/) || value.match(/^(\d{1,5})$/);
+    if (match) {
+        let hours, minutes;
+        if (match[2] !== undefined) {
+            hours = parseInt(match[1]);
+            minutes = parseInt(match[2]);
+        } else {
+            const raw = match[1];
+            if (raw.length < 3) {
+                hours = 0;
+                minutes = parseInt(raw);
+            } else {
+                hours = parseInt(raw.slice(0, raw.length - 2));
+                minutes = parseInt(raw.slice(-2));
+            }
+        }
+        if (isNaN(hours)) hours = 0;
+        if (isNaN(minutes) || minutes > 59) minutes = 0;
+        
+        e.target.value = `${hours}:${pad(minutes)}`;
+    } else if (value) {
+        e.target.value = '0:00';
+    }
+  });
+
+  input.addEventListener('keydown', (e) => {
+    const allowedKeys = [8, 46, 37, 39, 9];
+    if (allowedKeys.includes(e.keyCode)) return;
+    if (!/[0-9]/.test(e.key) && e.key !== ':') {
+      e.preventDefault();
+    }
+  });
+});
+
+
+// --- Data for Searchable Dropdowns ---
+const searchableDropdownData = {
+    customerName: [
+        { value: "acme_corp", text: "Acme Corporation" },
+        { value: "beta_llc", text: "Beta LLC Solutions" },
+        { value: "gamma_inc", text: "Gamma Industries Inc." },
+        { value: "delta_solutions", text: "Delta Solutions Group" },
+        { value: "epsilon_services", text: "Epsilon Global Services" }
+    ],
+    projectName: [
+        { value: "project_phoenix", text: "Project Phoenix" },
+        { value: "orion_initiative", text: "Orion Initiative" },
+        { value: "pegasus_program", text: "Pegasus Program" },
+        { value: "sirius_update", text: "Sirius System Update" },
+        { value: "vega_platform", text: "Vega Cloud Platform" }
+    ],
+    receivedBy: [
+        { value: "user_001", text: "Alice Wonderland" },
+        { value: "user_002", text: "Bob The Builder" },
+        { value: "user_003", text: "Charlie Brown" },
+        { value: "user_004", text: "Diana Prince" }
+    ],
+    assignedTo: [
+        { value: "dev_001", text: "Edward Scissorhands" },
+        { value: "dev_002", text: "Fiona Apple" },
+        { value: "dev_003", text: "George Jetson" },
+        { value: "dev_004", text: "Hannah Montana" }
+    ]
+};
+
+// --- Searchable Dropdown Logic ---
+function setupSearchableDropdown(config) {
+    const searchInput = document.getElementById(config.searchInputId);
+    const optionsContainer = document.getElementById(config.optionsContainerId);
+    const hiddenInput = document.getElementById(config.hiddenInputId);
+    
+    if (!searchInput || !optionsContainer || !hiddenInput) {
+        return;
+    }
+    const data = searchableDropdownData[config.dataKey] || [];
+
+    const populateOptions = (filter = "") => {
+        optionsContainer.innerHTML = ""; 
+        const lcFilter = filter.toLowerCase();
+        const filteredData = data.filter(item => item.text.toLowerCase().includes(lcFilter));
+
+        if (filteredData.length === 0) {
+            const noResultItem = document.createElement('div');
+            noResultItem.classList.add('option-item', 'no-results', 'text-gray-500');
+            noResultItem.textContent = 'No matches found';
+            optionsContainer.appendChild(noResultItem);
+        } else {
+            filteredData.forEach(item => {
+                const optionItem = document.createElement('div');
+                optionItem.classList.add('option-item', 'text-gray-700', 'hover:bg-blue-500', 'hover:text-white');
+                optionItem.textContent = item.text;
+                optionItem.dataset.value = item.value;
+                
+                optionItem.addEventListener('mousedown', (e) => { 
+                    e.preventDefault(); 
+                    searchInput.value = item.text;
+                    hiddenInput.value = item.value;
+                    optionsContainer.classList.add('hidden');
+                });
+                optionsContainer.appendChild(optionItem);
+            });
+        }
+    };
+
+    searchInput.addEventListener('focus', () => {
+        populateOptions(searchInput.value); 
+        optionsContainer.classList.remove('hidden');
+    });
+
+    searchInput.addEventListener('input', () => {
+        populateOptions(searchInput.value);
+        optionsContainer.classList.remove('hidden'); 
+    });
+
+    searchInput.addEventListener('blur', () => {
+        setTimeout(() => {
+            if (!optionsContainer.matches(':hover')) { 
+                optionsContainer.classList.add('hidden');
+            }
+        }, 150);
+    });
+}
+
+// --- Collapsible Sections Logic ---
+function toggleCollapse(contentId, buttonElement) {
+    const content = document.getElementById(contentId);
+    const icon = buttonElement.querySelector('.material-icons');
+    const isExpanded = buttonElement.getAttribute('aria-expanded') === 'true';
+
+    if (isExpanded) {
+        content.style.display = "none";
+        icon.textContent = "expand_more";
+        buttonElement.setAttribute('aria-expanded', 'false');
+    } else {
+        content.style.display = "grid";
+        icon.textContent = "expand_less";
+        buttonElement.setAttribute('aria-expanded', 'true');
+    }
+}
+
+// --- DOMContentLoaded ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize collapsible sections
+    document.querySelectorAll('.collapsible-legend-button').forEach(button => {
+        const contentPanelId = button.getAttribute('aria-controls');
+        const contentPanel = document.getElementById(contentPanelId);
+        if (contentPanel) {
+            contentPanel.style.display = "grid";
+            button.setAttribute('aria-expanded', 'true');
+            const icon = button.querySelector('.material-icons');
+            if (icon) icon.textContent = "expand_less";
+        }
+    });
+    
+    // Initialize caller info visibility
+    populateCallerInfo();
+
+    // Initialize searchable dropdowns
+    const dropdownConfigs = [
+        { searchInputId: 'customerNameSearch', optionsContainerId: 'customerNameOptions', hiddenInputId: 'customerName', dataKey: 'customerName' },
+        { searchInputId: 'projectNameSearch', optionsContainerId: 'projectNameOptions', hiddenInputId: 'projectName', dataKey: 'projectName' },
+        { searchInputId: 'receivedBySearch', optionsContainerId: 'receivedByOptions', hiddenInputId: 'receivedBy', dataKey: 'receivedBy' },
+        { searchInputId: 'assignedToSearch', optionsContainerId: 'assignedToOptions', hiddenInputId: 'assignedTo', dataKey: 'assignedTo' },
+    ];
+
+    dropdownConfigs.forEach(config => {
+      if (document.getElementById(config.searchInputId)) {
+        setupSearchableDropdown(config);
+      }
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        dropdownConfigs.forEach(config => {
+            if (!document.getElementById(config.searchInputId)) return;
+
+            const searchInput = document.getElementById(config.searchInputId);
+            const optionsContainer = document.getElementById(config.optionsContainerId);
+            if (searchInput && optionsContainer) {
+                if (!searchInput.contains(event.target) && !optionsContainer.contains(event.target)) {
+                    optionsContainer.classList.add('hidden');
+                }
+            }
+        });
+    });
+    
+    const form = document.getElementById('ticketForm');
+    if (form) {
+        // Prevent Enter key in input fields from submitting the form
+        form.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                const targetElement = event.target;
+                if (targetElement.tagName === 'INPUT' &&
+                    targetElement.type !== 'button' &&
+                    targetElement.type !== 'submit' &&
+                    targetElement.type !== 'reset') {
+                    event.preventDefault();
+                }
+            }
+        });
+
+        // Handle form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            const formData = new FormData(form);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            console.log("Form Data:", data);
+            
+            const successMessageArea = document.querySelector('header p'); 
+            if(successMessageArea) {
+                successMessageArea.textContent = 'Form data logged to console! Ticket saved (simulated).';
+                successMessageArea.classList.remove('text-green-600');
+                successMessageArea.classList.add('text-blue-600');
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>
